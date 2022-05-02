@@ -1,0 +1,17 @@
+CREATE PROCEDURE PRIORIDADE_ALTERAR 
+(
+@PRI_Id INT,
+@PRI_Codigo VARCHAR(50),
+@PRI_Descricao VARCHAR(100),
+@PRI_CorTag VARCHAR(9),
+@PRI_Ordem INT
+)
+AS
+BEGIN
+UPDATE PRIORIDADE SET 
+PRI_Codigo = @PRI_Codigo,
+PRI_CorTag = @PRI_CorTag,
+PRI_Descricao = @PRI_Descricao,
+PRI_Ordem = @PRI_Ordem
+WHERE PRI_Id = @PRI_Id
+END

@@ -1,0 +1,44 @@
+﻿.filtroitem{
+    margin-right:15px;
+}
+.fildsetPadrao {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    margin: 7px;
+    padding: 10px;
+}
+.legendPadrao {
+    width: auto;
+    border: none;
+    margin-bottom: 3px;
+}
+.filtro {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.filtroCor{
+    display: flex;
+    flex-direction: column;
+}
+.botoes{
+    margin:7px;
+}
+.grid{
+    margin: 7px 7px auto 7px;
+    width:98%;
+    overflow: auto;
+}
+.dataDupla{
+    display:flex;
+    flex-direction:row;
+}
+.textoSimples{
+    margin: auto 3px auto 3px;
+}
+.centro {
+    text-align: center;
+    vertical-align: middle !important;
+}
