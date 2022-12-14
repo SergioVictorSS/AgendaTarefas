@@ -2,8 +2,15 @@
 using System.Web.UI.WebControls;
 namespace AgendaTarefaPaginas
 {
-	public class PaginaBase : System.Web.UI.Page
+	public class PaginaBase<T> : System.Web.UI.Page
     {
+        protected AgendaTarefas.Controller<T> controller;
+        protected void InicializarController(AgendaTarefas.Controller<T> controller)
+        {
+            this.controller = controller;
+        }
+
+
         public void InserirLog(System.Exception exception)
         {
             AgendaTarefas.LogController.InserirLog(exception);

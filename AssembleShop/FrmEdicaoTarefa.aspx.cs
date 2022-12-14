@@ -8,14 +8,15 @@ using AgendaTarefas;
 
 namespace AgendaTarefaPaginas
 {
-    public partial class FrmEdicaoTarefa : PaginaBase
+    public partial class FrmEdicaoTarefa : PaginaBase<Tarefa>
     {
-        TarefaController tarefaController = new TarefaController(SDBC.Instance);
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+
+            InicializarController(new TarefaController(SDBC.Instance));
+
             if (!IsPostBack)
-            {
+            {   
                 txtIdTarefa.Text = RequestInt("IdTarefa").ToString();
                 if ("0".Equals(txtIdTarefa.Text))
                 {
@@ -29,7 +30,7 @@ namespace AgendaTarefaPaginas
         }
         protected void BuscarDados()
         {
-            var tarefa = tarefaController.GetTarefa(int.Parse(txtIdTarefa.Text));
+            var tarefa = controller.BuscarId(int.Parse(txtIdTarefa.Text));
             txtCodigo.Value = tarefa.TAR_Codigo;
             txtDescricaoTatrefa.Value = tarefa.TAR_Descricao;
             txtDataEntregaIni.Value = tarefa.TAR_DataHoraEntrega.ToString("yyyy-MM-dd");
@@ -50,12 +51,12 @@ namespace AgendaTarefaPaginas
                 var tarefa = GerarTarefa();
                 if (tarefa.TAR_Id > 0)
                 {
-                    tarefaController.AlterarTarefa(tarefa);
+                    controller.Alterar(tarefa);
                     FecharJanela(true, "Tarefa alterada com sucesso!");
                 }
                 else
                 {
-                    tarefaController.InserirTarefa(tarefa);
+                    controller.Inserir(tarefa);
                     FecharJanela(true, "Tarefa incluída com sucesso!");
                 }
             }

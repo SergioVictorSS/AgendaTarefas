@@ -8,12 +8,13 @@ using System.Web.UI.WebControls;
 
 namespace AgendaTarefaPaginas
 {
-    public partial class AgendaTarefasInicio : PaginaBase
+    public partial class AgendaTarefasInicio : PaginaBase<Tarefa>
     {
-        TarefaController tarefasController = new TarefaController(SDBC.Instance);
         static bool reverse = false;
         protected void Page_Load(object sender, EventArgs e)
         {
+            InicializarController(new TarefaController(SDBC.Instance));
+
             if (!IsPostBack)
             {
                 PreencheDropDownList(lstPrioridade, "PRIORIDADE_CONSULTAR_LIST_PREENCHIMENTO", 0, true, "Todas");
@@ -25,7 +26,8 @@ namespace AgendaTarefaPaginas
         }
         protected void CarregarGrid(string sortExpression = "",bool reverso = false)
         {
-            tarefasController.PreencherGridViewOrdenada(grvBusca,sortExpression,reverso, txtCodigo.Value, txtDescricaoTatrefa.Value, Convert.ToDateTime(txtDataEntregaIni.Value), Convert.ToDateTime(txtDataEntregaFim.Value), Convert.ToInt32(lstPrioridade.SelectedValue), Convert.ToInt32(lstStatus.SelectedValue));
+            var tarefa = new Tarefa() { TAR_Codigo = txtCodigo.Value, DataHoraInicio = Convert.ToDateTime(txtDataEntregaIni.Value), DataHoraFim = Convert.ToDateTime(txtDataEntregaFim.Value), TAR_PRI_IdPrioridade = Convert.ToInt32(lstPrioridade.SelectedValue), TAR_STA_IdStatus = Convert.ToInt32(lstStatus.SelectedValue),TAR_Descricao = txtDescricaoTatrefa.Value };
+            ((TarefaController)controller).PreencherGridViewOrdenada(grvBusca,sortExpression,reverso, tarefa);
         }
         protected void grvBusca_RowCommand(object sender, GridViewCommandEventArgs e)
         {
@@ -35,10 +37,10 @@ namespace AgendaTarefaPaginas
             switch (e.CommandName)
             {
                 case "Excluir":
-                    tarefasController.ExcluirTarefa(idTarefa);
+                    controller.Excluir(idTarefa);
                     break;
                 case "Concluir":
-                    tarefasController.ConcluirTarefa(idTarefa);
+                    ((TarefaController)controller).ConcluirTarefa(idTarefa);
                     break;
             }
             CarregarGrid();

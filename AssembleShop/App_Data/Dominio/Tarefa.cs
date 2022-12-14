@@ -16,5 +16,8 @@ public class Tarefa
 
     public int TAR_STA_IdStatus { get; set; }
     public string StatusExtenso {get;set;}
+    public DateTime DataHoraInicio { get; set; }
+    public DateTime DataHoraFim { get; set; }
+
 
 }

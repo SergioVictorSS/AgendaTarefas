@@ -5,7 +5,7 @@ using System;
 
 namespace AgendaTarefas
 {
-    public class TarefaController
+    public class TarefaController : Controller<Tarefa>
     {
         MyDBContext _dbContext;
         public TarefaController(MyDBContext dBContext)
@@ -13,25 +13,25 @@ namespace AgendaTarefas
             _dbContext = dBContext;
         }
 
-        public Tarefa GetTarefa(int idTarefa)
+        public Tarefa BuscarId(int id)
         {
-            return _dbContext.Database.SqlQuery<Tarefa>("CONSULTA_TAREFA_ID {0}", new object[] { idTarefa }).ToList().FirstOrDefault();
+            return _dbContext.Database.SqlQuery<Tarefa>("CONSULTA_TAREFA_ID {0}", new object[] { id }).ToList().FirstOrDefault();
         }
 
-        public List<Tarefa> GetTarefas(string codigoTarefa, string DescricaoTarefa, DateTime DataInicioBusca, DateTime DataFimBusca,int idPrioridade, int idStatus)
+        public List<Tarefa> Listar(Tarefa tarefaBuscada)
         {
-            return _dbContext.Database.SqlQuery<Tarefa>("PESQUISA_TAREFAS {0}, {1}, {2}, {3}, {4},{5}", new object[] { codigoTarefa,DescricaoTarefa,DataInicioBusca,DataFimBusca,idPrioridade, idStatus }).ToList();
+            return _dbContext.Database.SqlQuery<Tarefa>("PESQUISA_TAREFAS {0}, {1}, {2}, {3}, {4},{5}", new object[] { tarefaBuscada.TAR_Codigo, tarefaBuscada.TAR_Descricao, tarefaBuscada.DataHoraInicio, tarefaBuscada.DataHoraFim, tarefaBuscada.TAR_PRI_IdPrioridade, tarefaBuscada.TAR_STA_IdStatus }).ToList();
         }
 
-        public decimal InserirTarefa(Tarefa tarefa)
+        public decimal Inserir(Tarefa tarefa)
         {
            return _dbContext.Database.SqlQuery<decimal>("TAREFA_INSERIR {0}, {1}, {2}, {3}, {4},{5}", new object[] { tarefa.TAR_Codigo,tarefa.TAR_Descricao, tarefa.TAR_PRI_IdPrioridade,tarefa.TAR_STA_IdStatus,tarefa.TAR_DataHoraCadastro,tarefa.TAR_DataHoraEntrega  }).ToList().FirstOrDefault();
         }
-        public void AlterarTarefa(Tarefa tarefa)
+        public void Alterar(Tarefa tarefa)
         {
             _dbContext.Database.ExecuteSqlCommand("TAREFA_ALTERAR {0}, {1}, {2}, {3}, {4},{5}", new object[] { tarefa.TAR_Id,tarefa.TAR_Codigo, tarefa.TAR_Descricao, tarefa.TAR_PRI_IdPrioridade, tarefa.TAR_STA_IdStatus, tarefa.TAR_DataHoraEntrega });
         }
-        public void ExcluirTarefa(int idTarefa)
+        public void Excluir(int idTarefa)
         {
             _dbContext.Database.ExecuteSqlCommand("TAREFA_EXCUIR {0}", new object[] { idTarefa });
         }
@@ -40,9 +40,9 @@ namespace AgendaTarefas
             _dbContext.Database.ExecuteSqlCommand("TAREFA_CONCLUIR {0}", new object[] { idTarefa });
 
         }
-        public void PreencherGridViewOrdenada(GridView gridView, string sortExpression, bool reverse, string codigoTarefa, string DescricaoTarefa, DateTime DataInicioBusca, DateTime DataFimBusca, int idPrioridade,int idStatus)
+        public void PreencherGridViewOrdenada(GridView gridView, string sortExpression, bool reverse, Tarefa tarefa)
         {
-            var tarefas = GetTarefas( codigoTarefa,  DescricaoTarefa,  DataInicioBusca,  DataFimBusca,  idPrioridade,idStatus);
+            var tarefas = Listar(tarefa);
             switch (sortExpression)
             {
                 case "prioridade":

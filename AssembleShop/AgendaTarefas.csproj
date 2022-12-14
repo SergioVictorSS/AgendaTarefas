@@ -115,6 +115,7 @@
     <Content Include="Content\AgendaTarefas.css" />
     <Content Include="Content\notification.css" />
     <Content Include="FrmAgendaTarefasInicio.aspx" />
+    <Compile Include="App_Data\Interface\Controller.cs" />
     <Compile Include="App_Data\PaginaBase\PaginaBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

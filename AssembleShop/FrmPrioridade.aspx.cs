@@ -8,22 +8,22 @@ using AgendaTarefas;
 using System.Web.UI.HtmlControls;
 namespace AgendaTarefaPaginas
 {
-    public partial class FrmPrioridade : PaginaBase
+    public partial class FrmPrioridade : PaginaBase<Prioridade>
     {
-        PrioridadeController prioridadeController = new PrioridadeController(SDBC.Instance);
+        
         protected void Page_Load(object sender, EventArgs e)
         {
+            InicializarController(new PrioridadeController(SDBC.Instance));
+
             if (!IsPostBack)
-            {
-                CarregarGrid();
-            }
+                CarregarGrid();      
 
         }
         protected void CarregarGrid()
         {
             if (string.IsNullOrEmpty(txtOrdemPrioridade.Value))
                 txtOrdemPrioridade.Value = "0";
-            grvBusca.DataSource = prioridadeController.GetPrioridades(txtCodigo.Value, txtDescricaoPrioridade.Value,int.Parse(txtOrdemPrioridade.Value));
+            grvBusca.DataSource = controller.Listar(GerarPrioridade());
             grvBusca.DataBind();
         }
 
@@ -31,7 +31,7 @@ namespace AgendaTarefaPaginas
         {
             try
             {
-                prioridadeController.AlterarPrioridade(GerarPrioridade(grvBusca.Rows[int.Parse(e.CommandArgument.ToString())]));
+                controller.Alterar(GerarPrioridade(grvBusca.Rows[int.Parse(e.CommandArgument.ToString())]));
                 Notificar("Registro alterado com sucesso!", TipoNotificacao.Sucesso);
             }catch(Exception ex)
             {
@@ -85,7 +85,7 @@ namespace AgendaTarefaPaginas
             }
             try
             {
-                prioridadeController.InserirPrioridade(GerarPrioridade());
+                controller.Inserir(GerarPrioridade());
                 LimparCampos();
                 CarregarGrid();
                 Notificar("Registro inserido com sucesso!", TipoNotificacao.Sucesso);
